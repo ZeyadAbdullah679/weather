@@ -10,9 +10,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.tooling.preview.Preview
 import com.london.weather.data.repositories.WeatherRepositoryImpl
 import com.london.weather.presentation.theme.WeatherTheme
-import kotlinx.coroutines.GlobalScope
 import org.koin.android.ext.android.getKoin
-import org.koin.core.Koin
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
