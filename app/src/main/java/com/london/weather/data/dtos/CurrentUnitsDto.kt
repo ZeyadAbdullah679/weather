@@ -12,8 +12,8 @@ data class CurrentUnitsDto(
     val interval: String?,
     @SerialName("is_day")
     val isDay: String?,
-    @SerialName("rain")
-    val rain: String?,
+    @SerialName("precipitation_probability")
+    val precipitationProbability: String?,
     @SerialName("relative_humidity_2m")
     val relativeHumidity2m: String?,
     @SerialName("surface_pressure")
