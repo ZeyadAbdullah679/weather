@@ -19,11 +19,11 @@ data class CurrentDto(
     @SerialName("surface_pressure")
     val surfacePressure: Double?,
     @SerialName("temperature_2m")
-    val temperature2m: Int?,
+    val temperature2m: Double?,
     @SerialName("time")
     val time: String?,
     @SerialName("uv_index")
-    val uvIndex: Int?,
+    val uvIndex: Double?,
     @SerialName("weather_code")
     val weatherCode: Int?,
     @SerialName("wind_speed_10m")

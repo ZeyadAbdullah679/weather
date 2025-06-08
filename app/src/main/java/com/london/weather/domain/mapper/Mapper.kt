@@ -21,8 +21,8 @@ fun CurrentDto.toCurrent(): Current {
         precipitationProbability = precipitationProbability ?: 0,
         relativeHumidity2m = relativeHumidity2m ?: 0,
         surfacePressure = surfacePressure ?: 0.0,
-        temperature2m = temperature2m ?: 0,
-        uvIndex = uvIndex ?: 0,
+        temperature2m = temperature2m ?: 0.0,
+        uvIndex = uvIndex ?: 0.0,
         weatherCode = weatherCode ?: 0,
         windSpeed10m = windSpeed10m ?: 0.0
     )

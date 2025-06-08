@@ -15,7 +15,7 @@ data class WeatherForecastDto(
     @SerialName("daily_units")
     val dailyUnitsDto: DailyUnitsDto?,
     @SerialName("elevation")
-    val elevation: Int?,
+    val elevation: Double?,
     @SerialName("generationtime_ms")
     val generationtimeMs: Double?,
     @SerialName("hourly")
