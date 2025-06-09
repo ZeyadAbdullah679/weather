@@ -36,8 +36,10 @@ import com.london.weather.presentation.components.CurrentWeatherCard
 import com.london.weather.presentation.components.DayWeatherRow
 import com.london.weather.presentation.components.HourWeatherCard
 import com.london.weather.presentation.components.LocationItem
+import com.london.weather.presentation.components.MaxMinTemperature
 import com.london.weather.presentation.theme.PrimaryTextDark
 import com.london.weather.presentation.theme.PrimaryTextLight
+import com.london.weather.presentation.utils.CloudCoverageMapper
 import com.london.weather.presentation.utils.ThemePreviews
 import com.london.weather.presentation.utils.WeatherCodeMapper
 
@@ -83,7 +85,12 @@ fun WeatherScreenContent(
                         .height(200.dp)
                 )
                 Image(
-                    painter = painterResource(WeatherCodeMapper.getWeatherIcon(current.weatherCode, isDark)), // Your weather icon
+                    painter = painterResource(
+                        WeatherCodeMapper.getWeatherIcon(
+                            current.weatherCode,
+                            isDark
+                        )
+                    ), // Your weather icon
                     contentDescription = stringResource(R.string.weather_state),
                     modifier = Modifier
                         .width(250.dp)
@@ -95,19 +102,18 @@ fun WeatherScreenContent(
             Column {
                 Text(
                     text = "${current.temperature2m}${currentUnits.temperature2m}",
-                    color = if(isDark) PrimaryTextDark else PrimaryTextLight,
+                    color = if (isDark) PrimaryTextDark else PrimaryTextLight,
                     style = MaterialTheme.typography.displayLarge
                 )
                 Text(
-                    text = "$current",
-                    color = if(isDark) PrimaryTextDark else PrimaryTextLight,
+                    text = CloudCoverageMapper.getCloudDescription(current.cloudCover),
+                    color = if (isDark) PrimaryTextDark else PrimaryTextLight,
                     style = MaterialTheme.typography.displayLarge
                 )
                 Spacer(Modifier.height(4.dp))
-                Text(
-                    text = "↑ 32°C  |  ↓ 20°C",
-                    color = Color(0xFF8689A3),
-                    fontSize = 14.sp
+                MaxMinTemperature(
+                    maxTemperature = "${daily.temperature2mMax[0]}${dailyUnits.temperature2mMax}",
+                    minTemperature = "${daily.temperature2mMin[0]}${dailyUnits.temperature2mMin}"
                 )
             }
         }
@@ -119,24 +125,21 @@ fun WeatherScreenContent(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 CurrentWeatherCard(
-                    value = "13 KM/h",
-                    label = "Wind",
-                    icon = if (isDark) R.drawable.uv_night
-                    else R.drawable.uv_day,
+                    value = current.windSpeed10m.toString() + currentUnits.windSpeed10m,
+                    label = stringResource(R.string.wind),
+                    icon = if (isDark) R.drawable.fast_wind_night else R.drawable.fast_wind_day,
                     modifier = Modifier.weight(1f)
                 )
                 CurrentWeatherCard(
-                    value = "13 KM/h",
-                    label = "Wind",
-                    icon = if (isDark) R.drawable.uv_night
-                    else R.drawable.uv_day,
+                    value = current.relativeHumidity2m.toString() + currentUnits.relativeHumidity2m,
+                    label = stringResource(R.string.humidity),
+                    icon = if (isDark) R.drawable.humidity_night else R.drawable.humidity_day,
                     modifier = Modifier.weight(1f)
                 )
                 CurrentWeatherCard(
-                    value = "24%",
-                    label = "Humidity",
-                    icon = if (isDark) R.drawable.uv_night
-                    else R.drawable.uv_day,
+                    value = current.precipitationProbability.toString() + currentUnits.precipitationProbability,
+                    label = stringResource(R.string.rain),
+                    icon = if (isDark) R.drawable.rain_night else R.drawable.rain_day,
                     modifier = Modifier.weight(1f)
                 )
             }
@@ -145,7 +148,24 @@ fun WeatherScreenContent(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
-
+                CurrentWeatherCard(
+                    value = current.uvIndex.toString(),
+                    label = stringResource(R.string.uv_index),
+                    icon = if (isDark) R.drawable.uv_night else R.drawable.uv_day,
+                    modifier = Modifier.weight(1f)
+                )
+                CurrentWeatherCard(
+                    value = current.surfacePressure.toString() + currentUnits.surfacePressure,
+                    label = stringResource(R.string.pressure),
+                    icon = if (isDark) R.drawable.pressure_night else R.drawable.pressure_day,
+                    modifier = Modifier.weight(1f)
+                )
+                CurrentWeatherCard(
+                    value = current.apparentTemperature.toString() + currentUnits.apparentTemperature,
+                    label = stringResource(R.string.feels_like),
+                    icon = if (isDark) R.drawable.temperature_night else R.drawable.temperature_day,
+                    modifier = Modifier.weight(1f)
+                )
             }
         }
 
@@ -192,7 +212,8 @@ private fun WeatherScreenPreview() {
                     temperature2m = 24.0,
                     uvIndex = 5.0,
                     weatherCode = 1,
-                    windSpeed10m = 15.0
+                    windSpeed10m = 15.0,
+                    cloudCover = 23.0
                 ),
                 currentUnits = CurrentUnits(
                     apparentTemperature = "°C",
@@ -200,7 +221,8 @@ private fun WeatherScreenPreview() {
                     relativeHumidity2m = "%",
                     surfacePressure = "hPa",
                     temperature2m = "°C",
-                    windSpeed10m = "km/h"
+                    windSpeed10m = "km/h",
+                    cloudCover = "%"
                 ),
                 daily = Daily(
                     temperature2mMax = listOf(30.0, 28.0, 27.0, 26.0, 25.0, 24.0, 23.0),
