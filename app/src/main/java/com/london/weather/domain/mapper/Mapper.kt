@@ -24,7 +24,8 @@ fun CurrentDto.toCurrent(): Current {
         temperature2m = temperature2m ?: 0.0,
         uvIndex = uvIndex ?: 0.0,
         weatherCode = weatherCode ?: 0,
-        windSpeed10m = windSpeed10m ?: 0.0
+        windSpeed10m = windSpeed10m ?: 0.0,
+        cloudCover = cloudCover ?: 0.0
     )
 }
 
@@ -35,7 +36,8 @@ fun CurrentUnitsDto.toCurrentUnits(): CurrentUnits {
         relativeHumidity2m = relativeHumidity2m ?: "",
         surfacePressure = surfacePressure ?: "",
         temperature2m = temperature2m ?: "",
-        windSpeed10m = windSpeed10m ?: ""
+        windSpeed10m = windSpeed10m ?: "",
+        cloudCover = cloudCover ?: ""
     )
 }
 

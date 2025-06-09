@@ -9,5 +9,6 @@ data class Current(
     val temperature2m: Double,
     val uvIndex: Double,
     val weatherCode: Int,
-    val windSpeed10m: Double
+    val windSpeed10m: Double,
+    val cloudCover: Double
 )

@@ -27,7 +27,7 @@ class WeatherDataSourceImpl(
                     parameter("longitude", long)
                     parameter(
                         "current",
-                        "temperature_2m,relative_humidity_2m,apparent_temperature,is_day,precipitation_probability,wind_speed_10m,weather_code,uv_index,surface_pressure"
+                        "temperature_2m,relative_humidity_2m,apparent_temperature,is_day,precipitation_probability,wind_speed_10m,weather_code,uv_index,surface_pressure,cloud_cover"
                     )
                     parameter("hourly", "temperature_2m,weather_code")
                     parameter("daily", "weather_code,temperature_2m_max,temperature_2m_min")

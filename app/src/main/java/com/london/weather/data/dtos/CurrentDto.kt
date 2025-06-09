@@ -27,5 +27,7 @@ data class CurrentDto(
     @SerialName("weather_code")
     val weatherCode: Int?,
     @SerialName("wind_speed_10m")
-    val windSpeed10m: Double?
+    val windSpeed10m: Double?,
+    @SerialName("cloud_cover")
+    val cloudCover: Double?
 )
