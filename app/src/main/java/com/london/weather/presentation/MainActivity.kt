@@ -1,16 +1,12 @@
 package com.london.weather.presentation
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.tooling.preview.Preview
-import com.london.weather.domain.repositories.WeatherRepository
 import com.london.weather.presentation.theme.WeatherTheme
-import org.koin.android.ext.android.getKoin
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -18,10 +14,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             WeatherTheme {
-                val repository: WeatherRepository = getKoin().get()
-                LaunchedEffect(key1 = 1) {
-                    Log.d("MainActivity", "${repository.getWeatherForecast(40.0, 40.0)}")
-                }
+
             }
         }
     }
