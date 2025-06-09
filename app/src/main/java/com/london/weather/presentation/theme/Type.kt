@@ -40,7 +40,7 @@ val Typography = Typography(
     ),
     titleSmall = TextStyle(
         fontFamily = FontFamily(Font(R.font.urbanist)),
-        fontWeight = FontWeight(500),
+        fontWeight = FontWeight(400),
         fontSize = 14.sp, // "Feels like", "Wind", "Humidity", etc.
         letterSpacing = 0.25.sp,
         textAlign = TextAlign.Center

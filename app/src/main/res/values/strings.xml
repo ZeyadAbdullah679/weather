@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Weather</string>
+    <string name="location_icon">Location Icon</string>
+    <string name="max_temperature">Max Temperature</string>
 </resources>
