@@ -76,4 +76,8 @@ dependencies {
 
     //di
     implementation(libs.koin.android)
+    implementation(libs.koin.androidx.compose)
+
+    // Google Play Services Location
+    implementation("com.google.android.gms:play-services-location:21.0.1")
 }
