@@ -9,6 +9,6 @@ class GetWeatherForecastUseCase(
     private val repository: WeatherRepository
 ) {
     suspend operator fun invoke(long: Double, lat: Double): Flow<DataState<WeatherForecast>> {
-        return repository.getWeatherForecast(long, lat)
+        return repository.getWeatherForecast(lat, long)
     }
 }

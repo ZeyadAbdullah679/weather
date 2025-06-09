@@ -2,6 +2,7 @@ package com.london.weather
 
 import android.app.Application
 import com.london.weather.di.dataSourceModule
+import com.london.weather.di.presentationModule
 import com.london.weather.di.repositoryModule
 import com.london.weather.di.useCaseModule
 import org.koin.android.ext.koin.androidContext
@@ -17,7 +18,7 @@ class WeatherApplication: Application() {
             // Reference Android context
             androidContext(this@WeatherApplication)
             //Load Modules
-            modules(dataSourceModule, repositoryModule, useCaseModule)
+            modules(dataSourceModule, repositoryModule, useCaseModule, presentationModule)
         }
     }
 }
