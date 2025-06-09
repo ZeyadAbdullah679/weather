@@ -5,8 +5,9 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
-import com.london.weather.presentation.screens.weather.ScrollTransformLayout
+import com.london.weather.presentation.screens.weather.WeatherScreen
 import com.london.weather.presentation.theme.WeatherTheme
 
 class MainActivity : ComponentActivity() {
@@ -15,8 +16,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             WeatherTheme {
-                ScrollTransformLayout()
-//                WeatherScreen(context = LocalContext.current)
+//                ScrollTransformLayout()
+                WeatherScreen(context = LocalContext.current)
 //                LaunchedEffect(Unit) {
 //                    val getWeatherForecastUseCase: GetWeatherForecastUseCase =
 //                        getKoin().get()
