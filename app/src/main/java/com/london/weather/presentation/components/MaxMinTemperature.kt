@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
@@ -41,7 +40,11 @@ fun MaxMinTemperature(
         verticalAlignment = Alignment.Bottom,
         modifier = modifier
             .height(35.dp)
-            .background(color = Color(0x14FFFFFF), shape = RoundedCornerShape(size = 100.dp))
+            .background(
+                color = if (isDark) Color(0x14FFFFFF)
+                else Color(0x14060414),
+                shape = RoundedCornerShape(size = 100.dp)
+            )
             .padding(horizontal = 24.dp, vertical = 8.dp)
     ) {
         Icon(
