@@ -1,5 +1,6 @@
 package com.london.weather.presentation.screens.weather
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -9,13 +10,20 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.london.weather.R
@@ -26,10 +34,19 @@ import com.london.weather.domain.model.DailyUnits
 import com.london.weather.domain.model.Hourly
 import com.london.weather.domain.model.HourlyUnits
 import com.london.weather.domain.model.WeatherForecast
-import com.london.weather.presentation.components.AnimatedWeatherContent
 import com.london.weather.presentation.components.CurrentWeatherCard
 import com.london.weather.presentation.components.LocationItem
+import com.london.weather.presentation.components.MaxMinTemperature
+import com.london.weather.presentation.components.TodayWeatherHourItems
+import com.london.weather.presentation.components.UpcomingWeatherItems
+import com.london.weather.presentation.theme.PrimaryTextDark
+import com.london.weather.presentation.theme.PrimaryTextLight
+import com.london.weather.presentation.theme.TertiaryTextDark
+import com.london.weather.presentation.theme.TertiaryTextLight
+import com.london.weather.presentation.utils.CloudCoverageMapper
 import com.london.weather.presentation.utils.ThemePreviews
+import com.london.weather.presentation.utils.WeatherCodeMapper
+import kotlin.math.roundToInt
 
 @Composable
 fun WeatherScreenContent(
@@ -55,74 +72,51 @@ fun WeatherScreenContent(
                     else listOf(Color(0xFF87CEFA), Color(0xFFFFFFFF))
                 )
             )
-            .padding(16.dp)
+            .padding(vertical = 26.dp, horizontal = 16.dp)
             .verticalScroll(scrollState),
-        verticalArrangement = Arrangement.Center,
+        verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // City, Temperature & Status
         Spacer(modifier = Modifier.height(10.dp))
 
         LocationItem(state.cityName, isDark = isDark)
 
+        Image(
+            painter = painterResource(
+                WeatherCodeMapper.getWeatherIcon(
+                    current.weatherCode,
+                    isDark
+                )
+            ),
+            contentDescription = stringResource(R.string.weather_state),
+            modifier = Modifier
+                .size(226.dp)
+        )
+
+        Spacer(Modifier.width(24.dp))
+
         Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            AnimatedWeatherContent(
-                scrollState = scrollState,
-                current = current,
-                daily = daily,
-                currentUnits = currentUnits,
-                dailyUnits = dailyUnits,
-                isDark = isDark
+            Text(
+                text = "${current.temperature2m.roundToInt()}${currentUnits.temperature2m}",
+                color = if (isDark) PrimaryTextDark else PrimaryTextLight,
+                style = MaterialTheme.typography.displayLarge
             )
-//            {
-////                Box(contentAlignment = Alignment.Center) {
-////                    Image(
-////                        painter = painterResource(R.drawable.blur_effect),
-////                        contentDescription = stringResource(R.string.weather_state),
-////                        modifier = Modifier
-////                            .width(226.dp)
-////                            .height(200.dp)
-////                    )
-////                    Image(
-////                        painter = painterResource(
-////                            WeatherCodeMapper.getWeatherIcon(
-////                                current.weatherCode,
-////                                isDark
-////                            )
-////                        ), // Your weather icon
-////                        contentDescription = stringResource(R.string.weather_state),
-////                        modifier = Modifier
-////                            .width(250.dp)
-////                            .height(250.dp)
-////                    )
-////                }
-////
-////                Spacer(Modifier.width(24.dp))
-////                Column(
-////                    verticalArrangement = Arrangement.Center,
-////                    horizontalAlignment = Alignment.CenterHorizontally
-////                ) {
-////                    Text(
-////                        text = "${current.temperature2m}${currentUnits.temperature2m}",
-////                        color = if (isDark) PrimaryTextDark else PrimaryTextLight,
-////                        style = MaterialTheme.typography.displayLarge
-////                    )
-////                    Text(
-////                        text = CloudCoverageMapper.getCloudDescription(current.cloudCover),
-////                        color = if (isDark) TertiaryTextDark else TertiaryTextLight,
-////                        style = MaterialTheme.typography.titleMedium
-////                    )
-////                    Spacer(Modifier.height(4.dp))
-////                    MaxMinTemperature(
-////                        maxTemperature = "${daily.temperature2mMax[0]}${dailyUnits.temperature2mMax}",
-////                        minTemperature = "${daily.temperature2mMin[0]}${dailyUnits.temperature2mMin}"
-////                    )
-////                }
-//            }
+            Text(
+                text = CloudCoverageMapper.getCloudDescription(current.cloudCover),
+                color = if (isDark) TertiaryTextDark else TertiaryTextLight,
+                style = MaterialTheme.typography.titleMedium
+            )
+            Spacer(Modifier.height(4.dp))
+            MaxMinTemperature(
+                maxTemperature = "${daily.temperature2mMax[0].roundToInt()}${dailyUnits.temperature2mMax}",
+                minTemperature = "${daily.temperature2mMin[0].roundToInt()}${dailyUnits.temperature2mMin}"
+            )
         }
+
+        Spacer(modifier = Modifier.height(24.dp))
 
         // Weather Info Cards
         Row(
@@ -130,7 +124,7 @@ fun WeatherScreenContent(
             modifier = Modifier.fillMaxWidth()
         ) {
             CurrentWeatherCard(
-                value = current.windSpeed10m.toString() + currentUnits.windSpeed10m,
+                value = current.windSpeed10m.toString() + " KM/h",
                 label = stringResource(R.string.wind),
                 icon = if (isDark) R.drawable.fast_wind_night else R.drawable.fast_wind_day,
                 modifier = Modifier.weight(1f),
@@ -151,7 +145,9 @@ fun WeatherScreenContent(
                 isDark = isDark
             )
         }
+
         Spacer(modifier = Modifier.height(6.dp))
+
         Row(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             modifier = Modifier.fillMaxWidth()
@@ -164,7 +160,7 @@ fun WeatherScreenContent(
                 isDark = isDark
             )
             CurrentWeatherCard(
-                value = current.surfacePressure.toString() + currentUnits.surfacePressure,
+                value = "${current.surfacePressure} ${currentUnits.surfacePressure}",
                 label = stringResource(R.string.pressure),
                 icon = if (isDark) R.drawable.pressure_night else R.drawable.pressure_day,
                 modifier = Modifier.weight(1f),
@@ -179,7 +175,29 @@ fun WeatherScreenContent(
             )
         }
 
+        Spacer(modifier = Modifier.height(24.dp))
 
+        TodayWeatherHourItems(
+            timeList = hourly.time,
+            temperatureList = hourly.temperature2m.map {
+                it.roundToInt().toString() + hourlyUnits.temperature2m
+            },
+            code = hourly.weatherCode,
+            isDark = isDark
+        )
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        UpcomingWeatherItems(
+            days = daily.time,
+            minTemperatures = daily.temperature2mMin.map {
+                it.roundToInt().toString() + dailyUnits.temperature2mMin
+            },
+            maxTemperatures = daily.temperature2mMax.map {
+                it.roundToInt().toString() + dailyUnits.temperature2mMax
+            },
+            weatherCodes = daily.weatherCode
+        )
     }
 }
 
