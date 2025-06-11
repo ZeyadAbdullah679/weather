@@ -12,4 +12,5 @@
     <string name="today">Today</string>
     <string name="weather_icon">Weather Icon</string>
     <string name="next_7_days">Next 7 days</string>
+    <string name="min_temperature">Min Temp</string>
 </resources>

@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -44,8 +45,7 @@ fun UpcomingWeatherCard(
         modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 8.dp),
-        verticalAlignment = Alignment.CenterVertically,
-
+        verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
             text = day,
@@ -54,22 +54,25 @@ fun UpcomingWeatherCard(
                 textAlign = TextAlign.Start
             ),
             color = if (isDark) TertiaryTextDark else TertiaryTextLight,
-            modifier = Modifier.weight(2f)
+            modifier = Modifier.weight(.7f)
         )
 
-        Spacer(modifier = Modifier.weight(1f))
+        // Center: Image
+        Box(
+            modifier = Modifier.weight(1.2f),
+            contentAlignment = Alignment.Center
+        ) {
+            Image(
+                painter = painterResource(WeatherCodeMapper.getWeatherIcon(weatherCode, isDark)),
+                contentDescription = stringResource(R.string.weather_icon),
+            )
+        }
 
-        Image(
-            painter = painterResource(WeatherCodeMapper.getWeatherIcon(weatherCode, isDark)),
-            contentDescription = stringResource(R.string.weather_icon),
-        )
-
-        Spacer(modifier = Modifier.weight(1f))
-
+        // Right: Temperature Info
         Row(
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
+            modifier = Modifier.weight(1f)
         ) {
             Icon(
                 painter = painterResource(if (isDark) R.drawable.arrow_up_night else R.drawable.arrow_up_day),
@@ -97,7 +100,7 @@ fun UpcomingWeatherCard(
 
             Icon(
                 painter = painterResource(if (isDark) R.drawable.arrow_down_night else R.drawable.arrow_down_day),
-                contentDescription = stringResource(R.string.max_temperature),
+                contentDescription = stringResource(R.string.min_temperature),
                 tint = Color.Unspecified
             )
 

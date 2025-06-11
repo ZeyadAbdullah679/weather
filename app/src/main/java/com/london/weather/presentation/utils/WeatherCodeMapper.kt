@@ -35,18 +35,13 @@ object WeatherCodeMapper {
         99 to Pair(R.drawable.thunderstrom_with_heavy_hail_day, R.drawable.thunderstrom_with_heavy_hail_night)
     )
 
-    /**
-     * Get the weather icon resource ID based on the weather code and time of day
-     * @param code The WMO weather code
-     * @param isDay Boolean indicating if it's daytime (true) or nighttime (false)
-     * @return The drawable resource ID for the weather icon
-     */
+
     @DrawableRes
     fun getWeatherIcon(code: Int, isDay: Boolean): Int {
         val iconPair = weatherIconMap[code]
         return when {
-            iconPair != null && isDay -> iconPair.first
-            iconPair != null && !isDay -> iconPair.second
+            iconPair != null && !isDay -> iconPair.first
+            iconPair != null && isDay -> iconPair.second
             else -> R.drawable.clear_sky_day // Default icon if code not found
         }
     }
