@@ -9,4 +9,7 @@
     <string name="uv_index">UV Index</string>
     <string name="pressure">Pressure</string>
     <string name="feels_like">Feels like</string>
+    <string name="today">Today</string>
+    <string name="weather_icon">Weather Icon</string>
+    <string name="next_7_days">Next 7 days</string>
 </resources>
