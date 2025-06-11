@@ -21,8 +21,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -109,10 +107,11 @@ fun WeatherScreenContent(
                 color = if (isDark) TertiaryTextDark else TertiaryTextLight,
                 style = MaterialTheme.typography.titleMedium
             )
-            Spacer(Modifier.height(4.dp))
+            Spacer(Modifier.height(12.dp))
             MaxMinTemperature(
                 maxTemperature = "${daily.temperature2mMax[0].roundToInt()}${dailyUnits.temperature2mMax}",
-                minTemperature = "${daily.temperature2mMin[0].roundToInt()}${dailyUnits.temperature2mMin}"
+                minTemperature = "${daily.temperature2mMin[0].roundToInt()}${dailyUnits.temperature2mMin}",
+                isDark = isDark
             )
         }
 
@@ -178,11 +177,11 @@ fun WeatherScreenContent(
         Spacer(modifier = Modifier.height(24.dp))
 
         TodayWeatherHourItems(
-            timeList = hourly.time,
+            timeList = hourly.time.take(24),
             temperatureList = hourly.temperature2m.map {
                 it.roundToInt().toString() + hourlyUnits.temperature2m
-            },
-            code = hourly.weatherCode,
+            }.take(24),
+            code = hourly.weatherCode.take(24),
             isDark = isDark
         )
 
@@ -196,7 +195,8 @@ fun WeatherScreenContent(
             maxTemperatures = daily.temperature2mMax.map {
                 it.roundToInt().toString() + dailyUnits.temperature2mMax
             },
-            weatherCodes = daily.weatherCode
+            weatherCodes = daily.weatherCode,
+            isDark = isDark
         )
     }
 }

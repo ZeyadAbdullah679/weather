@@ -3,8 +3,9 @@ package com.london.weather.presentation.components
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -34,16 +35,19 @@ fun TodayWeatherHourItems(
             color = if (isDark) PrimaryTextDark else PrimaryTextLight,
             style = MaterialTheme.typography.headlineMedium
         )
+
+        Spacer(modifier = Modifier.height(20.dp))
+
         LazyRow(
-            modifier = Modifier
-                    .padding(top = 12.dp),
+            modifier = Modifier,
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             items(timeList.size) {
-                Forecast(
+                TodayWeatherHourCard(
                     time = timeList[it].substring(11, 16),
                     temperature = temperatureList[it],
-                    icon = getWeatherIcon(isDay = isDark, code = code[it])
+                    icon = getWeatherIcon(isDay = isDark, code = code[it]),
+                    isDark = isDark
                 )
             }
         }

@@ -23,7 +23,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.london.weather.presentation.theme.SecondaryTextDark
 import com.london.weather.presentation.theme.SecondaryTextLight
@@ -32,7 +31,7 @@ import com.london.weather.presentation.theme.TertiaryTextLight
 
 
 @Composable
-fun Forecast(
+fun TodayWeatherHourCard(
     modifier: Modifier = Modifier,
     time: String,
     temperature: String,
@@ -54,7 +53,7 @@ fun Forecast(
                     ),
                     shape = RoundedCornerShape(24.dp)
                 )
-                .background(if (isDark) Color(0xB2060414) else Color(0xB2FFFFFF))
+                .background(if(isDark) Color(0xFF060414) else Color(0xB2FFFFFF))
         ) {
             Column(
                 modifier = Modifier
