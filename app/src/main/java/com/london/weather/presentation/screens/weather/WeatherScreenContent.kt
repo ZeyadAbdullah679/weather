@@ -1,26 +1,36 @@
 package com.london.weather.presentation.screens.weather
 
+import androidx.compose.animation.core.LinearOutSlowInEasing
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -60,6 +70,42 @@ fun WeatherScreenContent(
     val hourlyUnits = state.weatherForecast.hourlyUnits
 
     val scrollState = rememberScrollState()
+    val density = LocalDensity.current
+
+    val scrollProgress by remember {
+        derivedStateOf {
+            with(density) {
+                (scrollState.value / 30.dp.toPx()).coerceIn(0f, .9f)
+            }
+        }
+    }
+
+    val imageScale by animateFloatAsState(
+        targetValue = 1f - (0.1f * scrollProgress),
+        animationSpec = tween(durationMillis = 200, easing = LinearOutSlowInEasing),
+        label = "imageScale"
+    )
+
+    val imageOffsetX by animateFloatAsState(
+        targetValue = -10f * scrollProgress,
+        animationSpec = spring(
+            dampingRatio = Spring.DampingRatioMediumBouncy,
+            stiffness = Spring.StiffnessLow
+        ),
+        label = "imageOffsetX"
+    )
+
+    val columnOffsetX by animateFloatAsState(
+        targetValue = 10f * scrollProgress,
+        animationSpec = tween(durationMillis = 200, easing = LinearOutSlowInEasing),
+        label = "columnOffsetX"
+    )
+    val columnOffsetY by animateFloatAsState(
+        targetValue = -20f * scrollProgress,
+        animationSpec = tween(durationMillis = 200, easing = LinearOutSlowInEasing),
+        label = "columnOffsetY"
+    )
+
 
     Column(
         modifier = modifier
@@ -75,49 +121,68 @@ fun WeatherScreenContent(
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Spacer(modifier = Modifier.height(10.dp))
+        Spacer(modifier = Modifier.height(32.dp))
 
         LocationItem(state.cityName, isDark = isDark)
+        Spacer(modifier = Modifier.height(12.dp))
 
-        Image(
-            painter = painterResource(
-                WeatherCodeMapper.getWeatherIcon(
-                    current.weatherCode,
-                    isDark
-                )
-            ),
-            contentDescription = stringResource(R.string.weather_state),
+        Box(
             modifier = Modifier
-                .size(226.dp)
-        )
-
-        Spacer(Modifier.width(24.dp))
-
-        Column(
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
+                .fillMaxWidth()
+                .height(
+                    (350.dp * (1f - scrollProgress)) + (200.dp * scrollProgress)
+                ),
+            contentAlignment = Alignment.TopCenter
         ) {
-            Text(
-                text = "${current.temperature2m.roundToInt()}${currentUnits.temperature2m}",
-                color = if (isDark) PrimaryTextDark else PrimaryTextLight,
-                style = MaterialTheme.typography.displayLarge
+            Image(
+                painter = painterResource(
+                    WeatherCodeMapper.getWeatherIcon(
+                        current.weatherCode,
+                        isDark
+                    )
+                ),
+                contentDescription = stringResource(R.string.weather_state),
+                modifier = Modifier
+                    .size(
+                        width = with(density) { (220.dp.toPx() * imageScale).toDp() },
+                        height = with(density) { (200.dp.toPx() * imageScale).toDp() }
+                    )
+                    .offset(
+                        x = imageOffsetX.dp - (130.dp * scrollProgress), // Move left
+                        y = 0.dp
+                    )
             )
-            Text(
-                text = CloudCoverageMapper.getCloudDescription(current.cloudCover),
-                color = if (isDark) TertiaryTextDark else TertiaryTextLight,
-                style = MaterialTheme.typography.titleMedium
-            )
-            Spacer(Modifier.height(12.dp))
-            MaxMinTemperature(
-                maxTemperature = "${daily.temperature2mMax[0].roundToInt()}${dailyUnits.temperature2mMax}",
-                minTemperature = "${daily.temperature2mMin[0].roundToInt()}${dailyUnits.temperature2mMin}",
-                isDark = isDark
-            )
+
+            Column(
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier
+                    .offset(
+                        x = columnOffsetX.dp + (130.dp * scrollProgress), // Move right
+                        y = (200.dp * (1f - scrollProgress)) + columnOffsetY.dp // Start below, move up
+                    )
+            ) {
+                Text(
+                    text = "${current.temperature2m.roundToInt()}${currentUnits.temperature2m}",
+                    color = if (isDark) PrimaryTextDark else PrimaryTextLight,
+                    style = MaterialTheme.typography.displayLarge
+                )
+                Text(
+                    text = CloudCoverageMapper.getCloudDescription(current.cloudCover),
+                    color = if (isDark) TertiaryTextDark else TertiaryTextLight,
+                    style = MaterialTheme.typography.titleMedium
+                )
+                Spacer(Modifier.height(12.dp))
+                MaxMinTemperature(
+                    maxTemperature = "${daily.temperature2mMax[0].roundToInt()}${dailyUnits.temperature2mMax}",
+                    minTemperature = "${daily.temperature2mMin[0].roundToInt()}${dailyUnits.temperature2mMin}",
+                    isDark = isDark
+                )
+            }
         }
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // Weather Info Cards
         Row(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             modifier = Modifier.fillMaxWidth()
