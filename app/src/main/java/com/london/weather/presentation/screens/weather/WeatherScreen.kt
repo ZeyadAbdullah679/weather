@@ -24,6 +24,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.google.android.gms.location.LocationServices
+import com.london.weather.presentation.components.ErrorView
+import com.london.weather.presentation.components.LoadingView
 import com.london.weather.presentation.utils.GPSLocation
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
@@ -71,35 +73,5 @@ fun WeatherScreen(
             requestLocationPermissions.launch(ACCESS_COARSE_LOCATION)
         }
         WeatherUiState.Loading -> LoadingView()
-    }
-}
-
-
-
-@Composable
-fun ErrorView(message: String, onRetry: () -> Unit) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Text(text = "Error: $message", color = MaterialTheme.colorScheme.error)
-        Spacer(modifier = Modifier.height(8.dp))
-        Button(onClick = onRetry) {
-            Text(text = "Retry")
-        }
-    }
-}
-
-@Composable
-fun LoadingView() {
-    Box(
-        modifier = Modifier
-            .fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-        CircularProgressIndicator()
     }
 }
