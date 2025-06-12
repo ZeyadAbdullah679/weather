@@ -1,5 +1,6 @@
 package com.london.weather.presentation.screens.weather
 
+import android.util.Log
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
@@ -23,6 +24,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -72,16 +74,20 @@ fun WeatherScreenContent(
     val scrollState = rememberScrollState()
     val density = LocalDensity.current
 
-    val isRow by remember {
-        derivedStateOf {
-            scrollState.value > 2
-        }
-    }
-
     val scrollProgress by remember {
         derivedStateOf {
             with(density) {
-                (scrollState.value / 30.dp.toPx()).coerceIn(0f, .9f)
+                if(scrollState.isScrollInProgress)
+                    (scrollState.value / 30.dp.toPx()).coerceIn(0f, .9f)
+                else
+                {
+                    if((scrollState.value / 30.dp.toPx()).coerceIn(0f, .9f)<=.45f){
+                        0.0f
+                    }
+                    else{
+                        0.9f
+                    }
+                }
             }
         }
     }
