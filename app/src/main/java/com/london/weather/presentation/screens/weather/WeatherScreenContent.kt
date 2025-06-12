@@ -72,6 +72,12 @@ fun WeatherScreenContent(
     val scrollState = rememberScrollState()
     val density = LocalDensity.current
 
+    val isRow by remember {
+        derivedStateOf {
+            scrollState.value > 2
+        }
+    }
+
     val scrollProgress by remember {
         derivedStateOf {
             with(density) {
