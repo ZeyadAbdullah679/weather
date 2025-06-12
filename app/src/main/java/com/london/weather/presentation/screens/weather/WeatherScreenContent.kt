@@ -126,14 +126,18 @@ fun WeatherScreenContent(
         LocationItem(state.cityName, isDark = isDark)
         Spacer(modifier = Modifier.height(12.dp))
 
+
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(
+                    // Smoothly transition from stacked height to side-by-side height
                     (350.dp * (1f - scrollProgress)) + (200.dp * scrollProgress)
                 ),
             contentAlignment = Alignment.TopCenter
         ) {
+
+            // Weather image with animated position
             Image(
                 painter = painterResource(
                     WeatherCodeMapper.getWeatherIcon(
@@ -153,6 +157,7 @@ fun WeatherScreenContent(
                     )
             )
 
+            // Weather info column with animated position
             Column(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally,
